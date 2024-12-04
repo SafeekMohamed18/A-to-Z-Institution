@@ -1,0 +1,140 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A to Z - Login</title>
+    <style>
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4; /* Light gray background */
+    margin: 0;
+}
+
+.login-container {
+    background-color: #fff; /* White background for the container */
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 300px;
+    text-align: center;
+    position: relative;
+}
+
+.login-container h2 {
+    margin-bottom: 20px;
+    color: #244855; /* Dark blue for heading */
+}
+
+.login-container input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.login-container button {
+    width: 100%;
+    padding: 10px;
+    background-color: #e64833; /* Bright orange for button background */
+    border: none;
+    border-radius: 5px;
+    color: #fff; /* White text on button */
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.login-container button:hover {
+    background-color: #874f41; /* Dark brown for button hover */
+}
+
+.error {
+    color: #e64833; /* Bright orange for error messages */
+    margin-top: 10px;
+}
+
+/* Styling for the close (exit) icon */
+.close-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 20px;
+    color: #e64833; /* Bright orange for the close icon */
+}
+
+.logo-placeholder {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 20px; /* Centered logo space */
+    background-image: url('logo A to Z.png'); /* Path to your logo */
+    background-size: cover; /* Cover the entire space */
+    background-position: center; /* Center the logo */
+    background-repeat: no-repeat; /* Prevent the logo from repeating */
+    border-radius: 50%; /* Circular logo space */
+}
+
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <span class="close-icon" onclick="closeLoginPage()">✖</span>
+        <div class="logo-placeholder">
+            <!-- Logo image should be placed here -->
+        </div>
+        <h2>A to Z Institute</h2>
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <label for="loginNIC">NIC Number</label>
+            <input type="text" id="loginNIC" required>
+            <label for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" required>
+            <button type="submit" onclick="login()">Login</button>
+            <div id="error" class="error"></div>
+        </form>
+    </div>
+    
+    <script>
+function login() {
+    const adminNIC = "200417002813";
+    const adminPassword = "admin786"; // Secure handling recommended
+
+    const nic = document.getElementById("loginNIC").value.trim();
+    const password = document.getElementById("loginPassword").value.trim();
+
+    const errorDiv = document.getElementById("error");
+
+    if (nic === adminNIC && password === adminPassword) {
+        // Admin login successful
+        window.location.href = "admin-dashboard.html"; // Redirect to admin page
+    } else {
+        const students = JSON.parse(localStorage.getItem('students')) || [];
+        const student = students.find(student => student.nic === nic);
+
+        if (student && atob(student.password) === password) {
+            // Student login successful
+            localStorage.setItem('currentStudentNIC', nic);
+            window.location.href = "student-dashboard.html"; // Redirect to student page
+        } else {
+            // Login failed
+            errorDiv.textContent = "Invalid NIC or Password";
+        }
+    }
+}
+
+function handleLogin(event) {
+    event.preventDefault();
+    login();
+}
+
+function closeLoginPage() {
+    window.close(); // Close the login page
+}
+    </script>
+</body>
+</html>
